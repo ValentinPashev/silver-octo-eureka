@@ -1,0 +1,31 @@
+{% extends 'common/base.html' %}
+{% load markdown_extras %}
+
+{% block content %}
+ <div class="container">
+            {% include 'posts/search-post-page.html' %}
+            <div class="posts">
+            {% for post in posts %}
+                <a id="post-url" href="{% url 'post_details' post.pk %}">
+                    <div class="post">
+                        <h2>{{ post.title|capfirst }}</h2>
+                    
+                        {% if not post.text %}
+                            {% lorem 3 p %}
+                        {% else %}
+                            {{ post.text|markdown|capfirst }}
+                        {% endif %}
+                    <h4>Created by: {{ post.created_by }}</h4>
+                    
+                        <div class="post-meta">
+                            <span>Posted by {{ post.author|default:"anonymous" }} on {{ post.created_at|date:"d-M-Y" }}</span>
+                        </div>
+                    </div>
+                </a>
+
+            {% empty %}
+                <h1 class="no-posts">No Posts</h1>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
